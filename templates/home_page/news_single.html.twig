@@ -1,0 +1,95 @@
+{% extends 'layout/base.html.twig' %}
+{% block title %} {{ single_news.title }}{% endblock %}
+
+{% block body %}
+
+<section class="site-section py-lg">
+      <div class="container">
+
+        <div class="row blog-entries element-animate">
+
+          <div class="col-md-12 col-lg-8 main-content">
+
+            <div class="post-content-body">
+              <img style="width: 100%;" class="img-fluid rounded" src="{{ vich_uploader_asset(single_news, 'imageFile') }}">
+              <h1>{{ single_news.title }}</h1>
+              <p>{{ single_news.description|raw }}</p>
+
+
+              <div class="comment-form-wrap pt-5">
+                <h3 class="mb-5">Leave a comment</h3>
+                {% if app.user %}
+                  {{ form_start(form) }}
+                       {{ form_widget(form.content,{'attr':{'class':'form form-control','placeholder':'comment'}}) }}<br>
+                       <input type='submit' value="save" class="btn btn-primary">
+                  {{ form_end(form) }}
+                  {% else %}
+                  You must be logged in to leave a comment - <a href="{{ path('app_login') }}">login</a>
+                {% endif %}
+
+
+                <ul class="comment-list">
+
+                  {% for comment in comments %}
+                  <li class="comment">
+                    <div class="comment-body">
+                      <h3>{{ comment.author.firstName }}  {{ comment.author.lastName }}</h3>
+                      <div class="meta">{{ comment.createdAt|ago }}</div>
+                      <p>{{ comment.content }}</p>
+                    </div>
+                  </li>
+                  {% endfor %}
+                </ul>
+              </div>
+
+            </div>
+
+          </div>
+
+          <!-- END main-content -->
+
+          <div class="col-md-12 col-lg-4 sidebar">
+            <div class="sidebar-box search-form-wrap">
+              <form action="#" class="search-form">
+                <div class="form-group">
+                  <span class="icon fa fa-search"></span>
+                  <input type="text" class="form-control" id="s" placeholder="Type a keyword and hit enter">
+                </div>
+              </form>
+            </div>
+            <!-- END sidebar-box -->
+
+
+            <div class="sidebar-box">
+              <h3 class="heading">recent Posts</h3>
+              <div class="post-entry-sidebar">
+                <ul>
+                  {% for news in recentNews %}
+                    <li>
+                    <a href="">
+                      <img style="border-radius: 5px" src="{{ vich_uploader_asset(news, 'imageFile') }}" alt="Image placeholder" class="mr-4">
+                      <div class="text">
+                        <h4>{{ news.title }}</h4>
+                        <div class="post-meta">
+                          <span class="mr-2">{{ news.createdAt|ago }} </span>
+                        </div>
+                      </div>
+                    </a>
+                  </li>
+                  {% endfor %}
+
+
+                </ul>
+              </div>
+            </div>
+            <!-- END sidebar-box -->
+
+          </div>
+          <!-- END sidebar -->
+
+        </div>
+      </div>
+    </section>
+
+
+{% endblock %}
